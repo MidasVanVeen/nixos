@@ -1,0 +1,88 @@
+* {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 13px;
+}
+
+window#waybar {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+}
+
+button {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+button:hover {
+    background-color: #222222;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    color: #ffffff;
+}
+
+#workspaces button.focused {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+#mode,
+#clock,
+#battery,
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#mpd,
+#custom-media,
+#tray,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon {
+    padding: 0 8px;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: #ffffff;
+}
+
+#battery.critical {
+    color: #ffffff;
+    background-color: #333333;
+}
+
+#power-profiles-daemon,
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#network,
+#pulseaudio {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#keyboard-state {
+    background: #000000;
+    color: #ffffff;
+}
+
+#scratchpad {
+    background: #000000;
+}
+
+#custom-media {
+    background: #000000;
+}
+
+#tray {
+    background-color: #000000;
+}

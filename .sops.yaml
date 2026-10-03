@@ -1,0 +1,6 @@
+keys:
+  - &midas age1yqs7u7nx8p9dvnu5jfu2urlftvducsqaeyapwtcuy79ull5hsupq50t2kl
+
+creation_rules:
+  - path_regex: secrets/[^/]+\.env$
+    age: *midas

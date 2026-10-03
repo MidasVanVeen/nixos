@@ -1,0 +1,25 @@
+@define-color window_bg_color #000000;
+@define-color window_fg_color #ffffff;
+@define-color view_bg_color #000000;
+@define-color view_fg_color #ffffff;
+@define-color headerbar_bg_color #000000;
+@define-color headerbar_fg_color #ffffff;
+@define-color sidebar_bg_color #000000;
+@define-color sidebar_fg_color #ffffff;
+
+window,
+window:backdrop,
+.background,
+.background:backdrop,
+headerbar,
+headerbar:backdrop,
+.sidebar,
+.sidebar:backdrop,
+view,
+view:backdrop,
+listview,
+listview:backdrop,
+popover contents {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}

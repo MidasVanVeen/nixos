@@ -1,0 +1,47 @@
+#window {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+#outer-box,
+#inner-box,
+#scroll {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#input {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    box-shadow: none;
+}
+
+#entry {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+#entry:selected {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+#text {
+    background-color: transparent;
+    color: inherit;
+}
+
+#entry:selected #text {
+    color: #000000;
+}
+
+#img {
+    background-color: transparent;
+}
+
+#unselected {
+    background-color: #000000;
+    color: #ffffff;
+}

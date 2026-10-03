@@ -1,0 +1,104 @@
+{
+    "spacing": 4,
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/scratchpad"
+    ],
+    "modules-center": [
+        "sway/window"
+    ],
+    "modules-right": [
+        "idle_inhibitor",
+        "pulseaudio",
+        "network",
+        "power-profiles-daemon",
+        "cpu",
+        "memory",
+        "temperature",
+        "backlight",
+        "sway/language",
+        "battery",
+        "clock",
+        "tray"
+    ],
+
+    "keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "{name}",
+        "format-icons": {
+            "locked": "CAPS",
+            "unlocked": "CAPS"
+        }
+    },
+    "sway/mode": {
+        "format": "[{}]"
+    },
+    "sway/scratchpad": {
+        "format": "SP {count}",
+        "show-empty": false
+    },
+    "mpd": {
+        "format": "{state} {artist} - {title}",
+        "format-disconnected": "MPD OFF",
+        "format-stopped": "MPD STOPPED"
+    },
+    "idle_inhibitor": {
+        "format": "IDLE {state}",
+        "format-icons": {
+            "activated": "ON",
+            "deactivated": "OFF"
+        }
+    },
+    "tray": {},
+    "clock": {
+        "format-alt": "{:%Y-%m-%d %H:%M}"
+    },
+    "cpu": {
+        "format": "CPU {usage}%"
+    },
+    "memory": {
+        "format": "MEM {used}%"
+    },
+    "temperature": {
+        "format": "TEMP {temperatureC}°C"
+    },
+    "backlight": {
+        "format": "BL {percent}%"
+    },
+    "battery": {
+        "format": "BAT {capacity}%",
+        "format-charging": "BAT {capacity}% CHG",
+        "format-plugged": "BAT {capacity}% PLN"
+    },
+    "power-profiles-daemon": {
+        "format": "PWR {profile}"
+    },
+    "network": {
+        "format-wifi": "WIFI {essid} ({signalStrength}%)",
+        "format-ethernet": "ETH {ipaddr}/{cidr}",
+        "format-disconnected": "NET OFF",
+    },
+    "pulseaudio": {
+        "format": "VOL {volume}%"
+    },
+    "custom/media": {
+        "format": "MP {text}",
+        "return-type": "json",
+        "max-length": 40,
+        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null"
+    },
+    "custom/power": {
+        "format": "PWR",
+        "tooltip": false,
+        "menu": "on-click",
+        "menu-file": "$HOME/.config/waybar/power_menu.xml",
+        "menu-actions": {
+            "shutdown": "shutdown",
+            "reboot": "reboot",
+            "suspend": "systemctl suspend",
+            "hibernate": "systemctl hibernate"
+        }
+    }
+}
