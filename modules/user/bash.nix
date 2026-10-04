@@ -46,36 +46,35 @@
       cdp() {
         _cdp_select || return
         if _cdp_has_dev_shell; then
-          nix develop
+          if (( $# )); then
+            nix develop --command "$@"
+          else
+            nix develop
+          fi
+        elif (( $# )); then
+          "$@"
         fi
       }
 
       cdpt() {
-        local dir session command
-        _cdp_select || return
-        dir="$PWD"
-        session="''${dir##*/}"
-        session="''${session//[.:]/_}"
+        cdp bash -c '
+          dir="$PWD"
+          session="''${dir##*/}"
+          session="''${session//[.:]/_}"
 
-        # Start the development shell inside tmux so it also works when the
-        # tmux server was started before entering the project's environment.
-        command='exec bash -i'
-        if _cdp_has_dev_shell; then
-          command='exec nix develop'
-        fi
-
-        if tmux has-session -t "=$session" 2>/dev/null; then
-          if [[ -n "''${TMUX:-}" ]]; then
-            tmux switch-client -t "=$session"
+          if tmux has-session -t "=$session" 2>/dev/null; then
+            if [[ -n "''${TMUX:-}" ]]; then
+              tmux switch-client -t "=$session"
+            else
+              tmux attach-session -t "=$session"
+            fi
+          elif [[ -n "''${TMUX:-}" ]]; then
+            tmux new-session -d -s "$session" -c "$dir" &&
+              tmux switch-client -t "=$session"
           else
-            tmux attach-session -t "=$session"
+            tmux new-session -s "$session" -c "$dir"
           fi
-        elif [[ -n "''${TMUX:-}" ]]; then
-          tmux new-session -d -s "$session" -c "$dir" "$command" &&
-            tmux switch-client -t "=$session"
-        else
-          tmux new-session -s "$session" -c "$dir" "$command"
-        fi
+        '
       }
 
       unzipd() {
