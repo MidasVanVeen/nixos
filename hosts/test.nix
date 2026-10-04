@@ -13,7 +13,7 @@ in
     ../services
     ../services/caddy.nix
     ../services/forgejo.nix
-    ../services/portfolio
+    ../services/portfolio.nix
     ../services/ntfy.nix
   ];
 

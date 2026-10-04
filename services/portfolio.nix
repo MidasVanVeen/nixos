@@ -1,11 +1,9 @@
 { config, pkgs, ... }:
 let
-  sourceRevision = "cec84a8e95f80e3a746e4e43b2c4703341a5ed34";
-  containerRevision = builtins.substring 0 12
-    (builtins.hashString "sha256" (builtins.readFile ./Containerfile));
+  sourceRevision = "02d790baae3a97b951ef7cd0a4d1d7ecf10a7510";
   sourceDirectory = "/var/lib/portfolio/source";
   dataDirectory = "/var/lib/portfolio/data";
-  imageName = "localhost/portfolio:${sourceRevision}-${containerRevision}";
+  imageName = "localhost/portfolio:${sourceRevision}";
   port = config.my.services.ports.portfolio;
 in
 {
@@ -52,7 +50,7 @@ in
 
     [Build]
     ImageTag=${imageName}
-    File=${./Containerfile}
+    File=${sourceDirectory}/Dockerfile
     SetWorkingDirectory=${sourceDirectory}
 
     [Service]
