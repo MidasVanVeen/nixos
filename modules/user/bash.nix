@@ -63,17 +63,17 @@
           session="''${session//[.:]/_}"
           shell="${config.programs.bash.package}/bin/bash"
 
-          if ! tmux has-session -t "=$session" 2>/dev/null; then
+          if ! tmux has-session -t "$session" 2>/dev/null; then
             tmux new-session -d -s "$session" -c "$dir" "exec $shell -i" || exit
           fi
 
-          tmux set-option -t "=$session" default-shell "$shell" || exit
-          tmux set-option -t "=$session" default-command "" || exit
+          tmux set-option -t "$session" default-shell "$shell" || exit
+          tmux set-option -t "$session" default-command "" || exit
 
           if [[ -n "''${TMUX:-}" ]]; then
-            tmux switch-client -t "=$session"
+            tmux switch-client -t "$session"
           else
-            tmux attach-session -t "=$session"
+            tmux attach-session -t "$session"
           fi
         '
       }
