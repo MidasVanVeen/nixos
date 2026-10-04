@@ -11,7 +11,6 @@ in
   imports = [
     ../profiles/headless-user.nix
     ../services
-    ../services/firewall.nix
     ../services/caddy.nix
     ../services/forgejo.nix
     ../services/portfolio
