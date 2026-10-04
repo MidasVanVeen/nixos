@@ -61,6 +61,7 @@
           dir="$PWD"
           session="''${dir##*/}"
           session="''${session//[.:]/_}"
+          shell="exec ${config.programs.bash.package}/bin/bash -i"
 
           if tmux has-session -t "=$session" 2>/dev/null; then
             if [[ -n "''${TMUX:-}" ]]; then
@@ -69,10 +70,10 @@
               tmux attach-session -t "=$session"
             fi
           elif [[ -n "''${TMUX:-}" ]]; then
-            tmux new-session -d -s "$session" -c "$dir" &&
+            tmux new-session -d -s "$session" -c "$dir" "$shell" &&
               tmux switch-client -t "=$session"
           else
-            tmux new-session -s "$session" -c "$dir"
+            tmux new-session -s "$session" -c "$dir" "$shell"
           fi
         '
       }
