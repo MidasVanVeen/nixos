@@ -6,6 +6,7 @@
     ../hardware/macbook/boot.nix
     ../profiles/desktop.nix
     ../modules/secrets.nix
+    ../modules/system/comin.nix
     ../services
   ];
 

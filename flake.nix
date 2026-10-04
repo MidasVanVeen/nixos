@@ -20,6 +20,10 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    comin = {
+      url = "github:nlewo/comin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -30,6 +34,7 @@
       home-manager-primary,
       apple-silicon,
       sops-nix,
+      comin,
       ...
     }:
     {
@@ -48,6 +53,7 @@
         system = "aarch64-linux";
         modules = [
           ./hosts/m22.nix
+          comin.nixosModules.comin
           apple-silicon.nixosModules.apple-silicon-support
           sops-nix.nixosModules.sops
           home-manager.nixosModules.home-manager
@@ -58,6 +64,7 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/primary.nix
+          comin.nixosModules.comin
           home-manager-primary.nixosModules.home-manager
         ];
       };
