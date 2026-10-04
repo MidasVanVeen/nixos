@@ -7,6 +7,7 @@
     ../services/caddy.nix
     ../services/forgejo.nix
     ../services/portfolio.nix
+    ../services/headless-codex.nix
     ../services/ntfy.nix
   ];
 
@@ -20,6 +21,8 @@
       forgejo = 3000;
       forgejoSsh = 2222;
       portfolio = 4000;
+      headlessCodex = 6433;
+      headlessCodexSsh = 2244;
       ntfy = 2586;
     };
 
