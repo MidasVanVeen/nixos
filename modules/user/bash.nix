@@ -6,6 +6,7 @@
     enableCompletion = true;
     initExtra = ''
       PS1='[\u@\h \W]\$ '
+      export NIX_SHELL_PRESERVE_PROMPT=1
       bind -x '"\C-n": clear'
 
       if [ -r /run/secrets/bashrc-secrets ]; then
