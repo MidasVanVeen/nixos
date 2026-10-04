@@ -29,7 +29,7 @@ in
 
   systemd.services.headless-codex-source = {
     description = "Prepare headless Codex source repositories";
-    # "primary" is the Git server's Tailscale name; this service runs on primary-1.
+    # The Git server shares this host's short name, so use its Tailscale IP.
     wants = [ "network-online.target" "tailscaled.service" ];
     after = [ "network-online.target" "tailscaled.service" ];
 
@@ -46,10 +46,12 @@ in
         name="$1"
         revision="$2"
         directory="${sourceDirectory}/$name"
+        url="ssh://git@100.106.63.14:222/midas/$name"
 
         if [ ! -d "$directory/.git" ]; then
-          git clone --branch main "ssh://git@primary:222/midas/$name" "$directory"
+          git clone --branch main "$url" "$directory"
         fi
+        git -C "$directory" remote set-url origin "$url"
         if ! git -C "$directory" cat-file -e "$revision^{commit}"; then
           git -C "$directory" fetch origin main
         fi
