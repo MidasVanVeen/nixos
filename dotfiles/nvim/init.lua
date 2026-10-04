@@ -43,8 +43,9 @@ vim.cmd('highlight StatusLineNC cterm=NONE ctermfg=0 ctermbg=7 guifg=#000000 gui
 vim.opt.mouse = ""
 
 -- Bootstrap lazy.nvim
--- Resolve Rust's server before Mason adds its own executables to PATH.
-local rust_analyzer = vim.fn.exepath('rust-analyzer')
+-- Servers supplied by the shell rather than installed through Mason.
+local shell_lsp_servers = { 'rust_analyzer', 'zls' }
+local startup_path = vim.env.PATH
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -745,7 +746,7 @@ require("lazy").setup({
         {
             'williamboman/mason.nvim',
             lazy = false,
-            opts = {}
+            opts = { PATH = 'append' }
         },
 
         -- Autocompletion
@@ -833,19 +834,25 @@ require("lazy").setup({
 
                 require('mason-lspconfig').setup({
                     ensure_installed = {},
-                    automatic_enable = { exclude = { 'rust_analyzer' } },
-                    handlers = {
-                        -- this first function is the "default handler"
-                        -- it applies to every language server without a "custom handler"
-                        function (server_name)
-                            require('lspconfig')[server_name].setup({})
-                        end
-                    }
+                    automatic_enable = { exclude = shell_lsp_servers }
                 })
 
-                if rust_analyzer ~= '' then
-                    vim.lsp.config('rust_analyzer', { cmd = { rust_analyzer } })
-                    vim.lsp.enable('rust_analyzer')
+                -- Look up each server on the PATH Neovim inherited, before Mason added its bin directory.
+                for _, name in ipairs(shell_lsp_servers) do
+                    local config = vim.lsp.config[name]
+                    if config and type(config.cmd) == 'table' and type(config.cmd[1]) == 'string' then
+                        local current_path = vim.env.PATH
+                        vim.env.PATH = startup_path
+                        local executable = vim.fn.exepath(config.cmd[1])
+                        vim.env.PATH = current_path
+
+                        if executable ~= '' then
+                            local cmd = vim.deepcopy(config.cmd)
+                            cmd[1] = executable
+                            vim.lsp.config(name, { cmd = cmd })
+                            vim.lsp.enable(name)
+                        end
+                    end
                 end
             end
         }
