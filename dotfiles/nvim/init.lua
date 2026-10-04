@@ -43,6 +43,9 @@ vim.cmd('highlight StatusLineNC cterm=NONE ctermfg=0 ctermbg=7 guifg=#000000 gui
 vim.opt.mouse = ""
 
 -- Bootstrap lazy.nvim
+-- Resolve Rust's server before Mason adds its own executables to PATH.
+local rust_analyzer = vim.fn.exepath('rust-analyzer')
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -830,6 +833,7 @@ require("lazy").setup({
 
                 require('mason-lspconfig').setup({
                     ensure_installed = {},
+                    automatic_enable = { exclude = { 'rust_analyzer' } },
                     handlers = {
                         -- this first function is the "default handler"
                         -- it applies to every language server without a "custom handler"
@@ -838,6 +842,11 @@ require("lazy").setup({
                         end
                     }
                 })
+
+                if rust_analyzer ~= '' then
+                    vim.lsp.config('rust_analyzer', { cmd = { rust_analyzer } })
+                    vim.lsp.enable('rust_analyzer')
+                end
             end
         }
     },

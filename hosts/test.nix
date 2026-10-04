@@ -55,6 +55,8 @@ in
     extraConfig = lib.mkAfter "tls internal";
   });
 
+  virtualisation.vmVariant.security.sudo.wheelNeedsPassword = false;
+
   virtualisation.vmVariant.virtualisation = {
     graphics = false;
     memorySize = 4096;
