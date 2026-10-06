@@ -57,31 +57,41 @@
       }
 
       cdpt() {
-        _cdp_select || return
-        local dir="$PWD" session shell command
-        session="''${dir##*/}"
-        session="''${session//[.:]/_}"
-        shell="${config.programs.bash.package}/bin/bash"
+        cdp bash -c '
+          dir="$PWD"
+          session="''${dir##*/}"
+          session="''${session//[.:]/_}"
+          shell="${config.programs.bash.package}/bin/bash"
+          environment=()
 
-        if _cdp_has_dev_shell; then
-          # Each tmux pane must enter the project shell independently.
-          printf -v command 'exec nix develop %q --command %q -i' "$dir" "$shell"
-        else
-          printf -v command 'exec %q -i' "$shell"
-        fi
+          # Give this session the environment from nix develop, even when
+          # another tmux session has already started the server.
+          while IFS= read -r -d "" entry; do
+            name="''${entry%%=*}"
+            case "$name" in
+              TERM|TMUX|TMUX_PANE|PWD|OLDPWD|SHLVL|_) continue ;;
+            esac
+            environment+=(-e "$entry")
+          done < <(env -0)
 
-        if ! tmux has-session -t "$session" 2>/dev/null; then
-          tmux new-session -d -s "$session" -c "$dir" "$command" || return
-        fi
+          if ! tmux has-session -t "$session" 2>/dev/null; then
+            tmux new-session -d -s "$session" -c "$dir" "''${environment[@]}" "exec $shell -i" || exit
+          else
+            for ((i = 1; i < ''${#environment[@]}; i += 2)); do
+              entry="''${environment[i]}"
+              tmux set-environment -t "$session" "''${entry%%=*}" "''${entry#*=}" || exit
+            done
+          fi
 
-        tmux set-option -t "$session" default-shell "$shell" || return
-        tmux set-option -t "$session" default-command "$command" || return
+          tmux set-option -t "$session" default-shell "$shell" || exit
+          tmux set-option -t "$session" default-command "exec $shell -i" || exit
 
-        if [[ -n "''${TMUX:-}" ]]; then
-          tmux switch-client -t "$session"
-        else
-          tmux attach-session -t "$session"
-        fi
+          if [[ -n "''${TMUX:-}" ]]; then
+            tmux switch-client -t "$session"
+          else
+            tmux attach-session -t "$session"
+          fi
+        '
       }
 
       unzipd() {
