@@ -57,25 +57,31 @@
       }
 
       cdpt() {
-        cdp bash -c '
-          dir="$PWD"
-          session="''${dir##*/}"
-          session="''${session//[.:]/_}"
-          shell="${config.programs.bash.package}/bin/bash"
+        _cdp_select || return
+        local dir="$PWD" session shell command
+        session="''${dir##*/}"
+        session="''${session//[.:]/_}"
+        shell="${config.programs.bash.package}/bin/bash"
 
-          if ! tmux has-session -t "$session" 2>/dev/null; then
-            tmux new-session -d -s "$session" -c "$dir" "exec $shell -i" || exit
-          fi
+        if _cdp_has_dev_shell; then
+          # Each tmux pane must enter the project shell independently.
+          printf -v command 'exec nix develop %q --command %q -i' "$dir" "$shell"
+        else
+          printf -v command 'exec %q -i' "$shell"
+        fi
 
-          tmux set-option -t "$session" default-shell "$shell" || exit
-          tmux set-option -t "$session" default-command "" || exit
+        if ! tmux has-session -t "$session" 2>/dev/null; then
+          tmux new-session -d -s "$session" -c "$dir" "$command" || return
+        fi
 
-          if [[ -n "''${TMUX:-}" ]]; then
-            tmux switch-client -t "$session"
-          else
-            tmux attach-session -t "$session"
-          fi
-        '
+        tmux set-option -t "$session" default-shell "$shell" || return
+        tmux set-option -t "$session" default-command "$command" || return
+
+        if [[ -n "''${TMUX:-}" ]]; then
+          tmux switch-client -t "$session"
+        else
+          tmux attach-session -t "$session"
+        fi
       }
 
       unzipd() {
