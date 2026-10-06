@@ -44,7 +44,7 @@ vim.opt.mouse = ""
 
 -- Bootstrap lazy.nvim
 -- Servers supplied by the shell rather than installed through Mason.
-local shell_lsp_servers = { 'rust_analyzer', 'zls' }
+local shell_lsp_servers = { 'rust_analyzer', 'zls', 'vtsls' }
 local startup_path = vim.env.PATH
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -461,7 +461,15 @@ require("lazy").setup({
                 scope = { enabled = true },
                 scroll = { enabled = false },
                 statuscolumn = { enabled = true },
-                words = { enabled = true }
+                words = { enabled = true },
+                zen = { enabled = true }
+            },
+            keys = {
+                {
+                    "<leader>z",
+                    function () Snacks.zen() end,
+                    desc = "Toggle Zen Mode"
+                }
             }
         },
         {
