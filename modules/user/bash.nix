@@ -62,29 +62,30 @@
           session="''${dir##*/}"
           session="''${session//[.:]/_}"
           shell="${config.programs.bash.package}/bin/bash"
-          environment=()
-
+          new_session=0
           # Give this session the environment from nix develop, even when
           # another tmux session has already started the server.
+          if ! tmux has-session -t "$session" 2>/dev/null; then
+            # Start a placeholder so the session exists while its environment
+            # is populated. Passing every variable via new-session -e can
+            # exceed tmux's command length limit for large dev shells.
+            tmux new-session -d -s "$session" -c "$dir" "exec sleep infinity" || exit
+            new_session=1
+          fi
+
           while IFS= read -r -d "" entry; do
             name="''${entry%%=*}"
             case "$name" in
               TERM|TMUX|TMUX_PANE|PWD|OLDPWD|SHLVL|_) continue ;;
             esac
-            environment+=(-e "$entry")
+            tmux set-environment -t "$session" "$name" "''${entry#*=}" || exit
           done < <(env -0)
-
-          if ! tmux has-session -t "$session" 2>/dev/null; then
-            tmux new-session -d -s "$session" -c "$dir" "''${environment[@]}" "exec $shell -i" || exit
-          else
-            for ((i = 1; i < ''${#environment[@]}; i += 2)); do
-              entry="''${environment[i]}"
-              tmux set-environment -t "$session" "''${entry%%=*}" "''${entry#*=}" || exit
-            done
-          fi
 
           tmux set-option -t "$session" default-shell "$shell" || exit
           tmux set-option -t "$session" default-command "exec $shell -i" || exit
+          if [[ "$new_session" == 1 ]]; then
+            tmux respawn-pane -k -t "$session:0.0" "exec $shell -i" || exit
+          fi
 
           if [[ -n "''${TMUX:-}" ]]; then
             tmux switch-client -t "$session"
