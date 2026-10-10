@@ -68,7 +68,7 @@
           if ! tmux has-session -t "$session" 2>/dev/null; then
             # Start a placeholder so the session exists while its environment
             # is populated. Passing every variable via new-session -e can
-            # exceed tmux's command length limit for large dev shells.
+            # exceed the tmux command length limit for large dev shells.
             tmux new-session -d -s "$session" -c "$dir" "exec sleep infinity" || exit
             new_session=1
           fi
