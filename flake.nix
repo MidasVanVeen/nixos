@@ -24,10 +24,6 @@
       url = "github:nlewo/comin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    omnibin = {
-      url = "github:fzakaria/omnibin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -39,7 +35,6 @@
       apple-silicon,
       sops-nix,
       comin,
-      omnibin,
       ...
     }:
     {
@@ -58,12 +53,6 @@
         system = "aarch64-linux";
         modules = [
           ./hosts/m22.nix
-          {
-            environment.systemPackages = [
-              omnibin.packages.aarch64-linux.omnibin
-              omnibin.packages.aarch64-linux.omnibin-shell
-            ];
-          }
           comin.nixosModules.comin
           apple-silicon.nixosModules.apple-silicon-support
           sops-nix.nixosModules.sops

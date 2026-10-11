@@ -163,26 +163,6 @@
         "type": "github"
       }
     },
-    "omnibin": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1791564108,
-        "narHash": "sha256-ud/SvYa8EPvBl//uQ/YhyEe+kwohVmDoyfTKRq3cRJw=",
-        "owner": "fzakaria",
-        "repo": "omnibin",
-        "rev": "544a839f83036c48b3d580765714c46a6f76cb0e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "fzakaria",
-        "repo": "omnibin",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "apple-silicon": "apple-silicon",
@@ -191,7 +171,6 @@
         "home-manager-primary": "home-manager-primary",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-primary": "nixpkgs-primary",
-        "omnibin": "omnibin",
         "sops-nix": "sops-nix"
       }
     },
