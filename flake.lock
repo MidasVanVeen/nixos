@@ -115,6 +115,22 @@
         "type": "github"
       }
     },
+    "nix-flatpak": {
+      "locked": {
+        "lastModified": 1767983141,
+        "narHash": "sha256-7ZCulYUD9RmJIDULTRkGLSW1faMpDlPKcbWJLYHoXcs=",
+        "owner": "gmodena",
+        "repo": "nix-flatpak",
+        "rev": "440818969ac2cbd77bfe025e884d0aa528991374",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gmodena",
+        "ref": "v0.7.0",
+        "repo": "nix-flatpak",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1770107345,
@@ -163,14 +179,36 @@
         "type": "github"
       }
     },
+    "omnibin": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791927359,
+        "narHash": "sha256-GwvYGi3evmSZnh1t9jPNbqmvvNFcLRBWKIYzO/GU8oU=",
+        "owner": "MidasVanVeen",
+        "repo": "omnibin",
+        "rev": "92deb1a02411c5d084968739293eee02b108dbdb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MidasVanVeen",
+        "repo": "omnibin",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "apple-silicon": "apple-silicon",
         "comin": "comin",
         "home-manager": "home-manager",
         "home-manager-primary": "home-manager-primary",
+        "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-primary": "nixpkgs-primary",
+        "omnibin": "omnibin",
         "sops-nix": "sops-nix"
       }
     },

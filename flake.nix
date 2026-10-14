@@ -24,6 +24,11 @@
       url = "github:nlewo/comin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/v0.7.0";
+    omnibin = {
+      url = "github:MidasVanVeen/omnibin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -35,6 +40,8 @@
       apple-silicon,
       sops-nix,
       comin,
+      nix-flatpak,
+      omnibin,
       ...
     }:
     {
@@ -51,12 +58,18 @@
 
       nixosConfigurations.m22 = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
+        specialArgs = { inherit omnibin; };
         modules = [
           ./hosts/m22.nix
           comin.nixosModules.comin
           apple-silicon.nixosModules.apple-silicon-support
           sops-nix.nixosModules.sops
           home-manager.nixosModules.home-manager
+          ({ config, ... }: {
+            home-manager.users.${config.my.user.name}.imports = [
+              nix-flatpak.homeManagerModules.nix-flatpak
+            ];
+          })
         ];
       };
 

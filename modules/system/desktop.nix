@@ -1,5 +1,17 @@
 { pkgs, ... }:
 
+let
+  kollektif-font = pkgs.runCommand "kollektif-font" {
+    src = pkgs.fetchurl {
+      url = "https://bnffonts.com/fonts/kollektif.zip";
+      hash = "sha256-HrMka1VRN5K4pxf092lKdFIJecjYf1SJ33uWTmc8lks=";
+    };
+    nativeBuildInputs = [ pkgs.unzip ];
+  } ''
+    mkdir -p "$out/share/fonts/truetype"
+    unzip -j "$src" '*.ttf' -d "$out/share/fonts/truetype"
+  '';
+in
 {
   nixpkgs.config.allowUnfree = true;
 
@@ -13,6 +25,8 @@
   fonts = {
     enableDefaultPackages = true;
     packages = with pkgs; [
+      geist-font
+      kollektif-font
       nerd-fonts.jetbrains-mono
       noto-fonts
       noto-fonts-color-emoji
@@ -25,6 +39,7 @@
   };
 
   services.dbus.enable = true;
+  services.flatpak.enable = true;
   security.polkit.enable = true;
 
   services.pipewire = {

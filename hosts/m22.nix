@@ -1,4 +1,13 @@
-{ pkgs, ... }:
+{
+  config,
+  omnibin,
+  pkgs,
+  ...
+}:
+
+let
+  omnibinPackages = omnibin.packages.${pkgs.stdenv.hostPlatform.system};
+in
 
 {
   imports = [
@@ -12,6 +21,11 @@
 
   networking.hostName = "m22";
   my.user.name = "midas";
+
+  home-manager.users.${config.my.user.name}.home.packages = [
+    omnibinPackages.omnibin
+    omnibinPackages.omnibin-shell
+  ];
 
   hardware.asahi.enable = true;
   hardware.asahi.peripheralFirmwareDirectory = ../hardware/macbook/vendorfw;

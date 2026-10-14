@@ -6,6 +6,7 @@
     ./kitty.nix
     ./appearance.nix
     ./sway.nix
+    ./flatpak.nix
   ];
 
   home.packages = with pkgs; [
@@ -25,6 +26,7 @@
     NIXOS_OZONE_WL = "1";
     GTK_THEME = "adw-gtk3-dark";
     SOPS_AGE_KEY_CMD = "${pkgs.ssh-to-age}/bin/ssh-to-age -private-key -i ${config.home.homeDirectory}/.ssh/id_rsa";
+    XDG_DATA_DIRS = "${config.home.homeDirectory}/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:\${XDG_DATA_DIRS}";
   };
 
   programs.firefox.enable = true;

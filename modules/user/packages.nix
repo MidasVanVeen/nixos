@@ -18,5 +18,7 @@
     tmux
     unzip
     wget
+    freecad
+    libreoffice
   ];
 }
